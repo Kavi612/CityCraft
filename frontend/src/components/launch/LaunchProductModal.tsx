@@ -1,6 +1,5 @@
 import { Loader2, Rocket, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { NPCAvatarPlaceholder } from '@/components/NPCAvatarPlaceholder'
 import { PrimaryButton } from '@/components/ui/PrimaryButton'
 import { SecondaryButton } from '@/components/ui/SecondaryButton'
@@ -10,6 +9,7 @@ import {
   fetchLaunchProductVerification,
   type LaunchProductResponse,
 } from '@/lib/launchProductClient'
+import { computeLaunchProductEconomics } from '@/lib/launchProductOutcomes'
 import { useGameStore } from '@/store/gameStore'
 import type { NPC } from '@/types'
 
@@ -25,11 +25,11 @@ function npcById(npcs: NPC[], id: string): NPC | undefined {
 }
 
 export function LaunchProductModal({ open, onClose }: LaunchProductModalProps) {
-  const navigate = useNavigate()
   const city = useGameStore((state) => state.city)
   const problem = useGameStore((state) => state.problem)
   const solutionSummary = useGameStore((state) => state.solutionSummary)
   const solutionAnswers = useGameStore((state) => state.solutionAnswers)
+  const stats = useGameStore((state) => state.stats)
   const npcs = useGameStore((state) => state.npcs)
   const hasLaunchedThisSolution = useGameStore(
     (state) => state.hasLaunchedThisSolution,
@@ -52,6 +52,17 @@ export function LaunchProductModal({ open, onClose }: LaunchProductModalProps) {
       solutionAnswers,
     )
   }, [city, problem, solutionSummary, npcs, solutionAnswers])
+
+  const economicsPreview = useMemo(() => {
+    if (!result || !problem || !solutionSummary) return null
+    return computeLaunchProductEconomics(
+      result,
+      npcs,
+      problem,
+      solutionSummary,
+      stats,
+    )
+  }, [result, npcs, problem, solutionSummary, stats])
 
   const runVerification = useCallback(async () => {
     if (!requestBody || !problem || !solutionSummary) return
@@ -97,15 +108,8 @@ export function LaunchProductModal({ open, onClose }: LaunchProductModalProps) {
       return
     }
 
-    const applied = applyLaunchProductResult(result)
+    applyLaunchProductResult(result)
     onClose()
-
-    if (applied) {
-      const outcome = useGameStore.getState().gameOutcome
-      if (outcome === 'lost') {
-        navigate('/game-over', { replace: true })
-      }
-    }
   }
 
   const sortedReactions = result
@@ -192,6 +196,63 @@ export function LaunchProductModal({ open, onClose }: LaunchProductModalProps) {
                   To build and launch this specific solution in {city.name}
                 </p>
               </div>
+
+              {economicsPreview && (
+                <div
+                  className={`rounded-2xl border px-4 py-3 ${
+                    economicsPreview.netCash >= 0
+                      ? 'border-emerald-200 bg-emerald-50'
+                      : 'border-rose-200 bg-rose-50'
+                  }`}
+                >
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500">
+                    Projected launch P&amp;L
+                  </p>
+                  <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <p className="text-stone-500">Early revenue</p>
+                      <p className="font-semibold text-stone-800">
+                        {formatRupeeShort(economicsPreview.revenue)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-stone-500">Net result</p>
+                      <p
+                        className={`font-semibold ${
+                          economicsPreview.netCash >= 0
+                            ? 'text-emerald-800'
+                            : 'text-rose-800'
+                        }`}
+                      >
+                        {economicsPreview.netCash >= 0 ? '+' : '−'}
+                        {formatRupeeShort(Math.abs(economicsPreview.netCash))}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-stone-500">Cash after launch</p>
+                      <p className="font-semibold text-stone-800">
+                        {formatRupeeShort(
+                          Math.max(0, stats.cash + economicsPreview.netCash),
+                        )}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-stone-500">Adoption</p>
+                      <p className="font-semibold text-stone-800">
+                        {economicsPreview.adoptionPercentage}% ·{' '}
+                        {economicsPreview.customers} customers
+                      </p>
+                    </div>
+                  </div>
+                  {stats.cash + economicsPreview.netCash <= 0 && (
+                    <p className="mt-3 text-xs font-semibold text-rose-800">
+                      This launch would wipe your cash. You can still confirm to
+                      record the outcome, but you won&apos;t be able to enter the
+                      dashboard until you start a new run.
+                    </p>
+                  )}
+                </div>
+              )}
 
               <div>
                 <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-stone-400">

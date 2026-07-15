@@ -8,6 +8,7 @@ import { SecondaryButton } from '@/components/ui/SecondaryButton'
 import { StepIndicator } from '@/components/ui/StepIndicator'
 import { avatars } from '@/data/avatars'
 import { BLUEPRINT_SECTIONS, formatFunds } from '@/lib/blueprintUi'
+import { formatRupeeShort } from '@/lib/formatRupee'
 import { STARTING_CASH, useGameStore } from '@/store/gameStore'
 import type { SolutionSummary } from '@/types'
 
@@ -36,6 +37,8 @@ export default function CompanySetup() {
   const hasLaunchedThisSolution = useGameStore(
     (state) => state.hasLaunchedThisSolution,
   )
+  const stats = useGameStore((state) => state.stats)
+  const lastLaunchEconomics = useGameStore((state) => state.lastLaunchEconomics)
   const gameOutcome = useGameStore((state) => state.gameOutcome)
 
   const [founderName, setFounderName] = useState(founder?.name ?? '')
@@ -72,16 +75,24 @@ export default function CompanySetup() {
   }
 
   const canLaunch =
-    founderName.trim().length > 0 && startupName.trim().length > 0
+    founderName.trim().length > 0 &&
+    startupName.trim().length > 0 &&
+    stats.cash > 0
 
   const handleLaunch = () => {
-    if (!canLaunch) return
+    if (!founderName.trim() || !startupName.trim()) return
 
     launchStartup({
       name: founderName.trim(),
       startupName: startupName.trim(),
       avatarId: founder.avatarId,
     })
+
+    if (useGameStore.getState().gameOutcome === 'lost') {
+      navigate('/game-over', { replace: true })
+      return
+    }
+
     navigate('/dashboard')
   }
 
@@ -166,14 +177,29 @@ export default function CompanySetup() {
 
             <div className="mt-auto rounded-xl border border-primary/25 bg-primary/10 p-3">
               <p className="text-[10px] font-bold uppercase tracking-wider text-primary">
-                Starting Capital
+                {hasLaunchedThisSolution ? 'Cash After Product Launch' : 'Starting Capital'}
               </p>
               <p className="mt-1 text-lg font-extrabold text-white">
-                {formatFunds(STARTING_CASH)}
+                {formatFunds(hasLaunchedThisSolution ? stats.cash : STARTING_CASH)}
               </p>
-              <p className="mt-1 text-xs text-white/55">
-                Day 1 begins when you launch. Stats reset to onboarding defaults.
-              </p>
+              {hasLaunchedThisSolution && lastLaunchEconomics && (
+                <p className="mt-2 text-xs text-white/70">
+                  Build cost {formatRupeeShort(lastLaunchEconomics.investment)} ·
+                  early revenue {formatRupeeShort(lastLaunchEconomics.revenue)} ·{' '}
+                  {lastLaunchEconomics.adoptionPercentage}% adoption
+                </p>
+              )}
+              {hasLaunchedThisSolution && stats.cash <= 0 && (
+                <p className="mt-2 text-xs font-semibold text-rose-300">
+                  No runway left — you cannot enter the dashboard. Start a new run
+                  or go back and revise your blueprint.
+                </p>
+              )}
+              {!hasLaunchedThisSolution && (
+                <p className="mt-1 text-xs text-white/55">
+                  Use Launch Product to stress-test costs before Day 1.
+                </p>
+              )}
             </div>
           </section>
 
@@ -239,12 +265,20 @@ export default function CompanySetup() {
             </span>
             </SecondaryButton>
           </span>
-          <PrimaryButton onClick={handleLaunch} disabled={!canLaunch}>
-            <span className="inline-flex items-center gap-2">
-              <Rocket className="h-4 w-4" aria-hidden="true" />
-              Launch Startup
-            </span>
-          </PrimaryButton>
+          <span
+            title={
+              stats.cash <= 0 && hasLaunchedThisSolution
+                ? 'Bankrupt — no cash left after product launch'
+                : undefined
+            }
+          >
+            <PrimaryButton onClick={handleLaunch} disabled={!canLaunch}>
+              <span className="inline-flex items-center gap-2">
+                <Rocket className="h-4 w-4" aria-hidden="true" />
+                Launch Startup
+              </span>
+            </PrimaryButton>
+          </span>
         </footer>
       </div>
 

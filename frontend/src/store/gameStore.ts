@@ -16,7 +16,7 @@ import {
   getActionDelta,
   type ActionId,
 } from '@/lib/actionsEngine'
-import { BANKRUPTCY_CASH } from '@/lib/winLossEngine'
+import { formatRupeeShort } from '@/lib/formatRupee'
 import type {
   City,
   DashboardActivity,
@@ -121,7 +121,22 @@ export function createInitialState(): GameState {
     gameOutcome: 'playing',
     lossReason: null,
     lossSummary: null,
+    lastLaunchEconomics: null,
   }
+}
+
+function buildBankruptcySummary(
+  economics: {
+    investment: number
+    revenue: number
+    netCash: number
+    adoptionPercentage: number
+  },
+): string {
+  return [
+    `Build cost was ${formatRupeeShort(economics.investment)} but early revenue only reached ${formatRupeeShort(economics.revenue)} (${economics.adoptionPercentage}% weighted adoption).`,
+    `Net launch result: ${formatRupeeShort(Math.abs(economics.netCash))} loss — cash could not stay above zero.`,
+  ].join(' ')
 }
 
 function clampNpcScore(value: number): number {
@@ -271,6 +286,21 @@ export const useGameStore = create<GameStore>()(
 
       launchStartup: (founder) => {
         const state = get()
+
+        if (state.stats.cash <= 0) {
+          const econ = state.lastLaunchEconomics
+          set({
+            founder,
+            gameOutcome: 'lost',
+            lossReason: 'bankruptcy',
+            lossSummary: econ
+              ? buildBankruptcySummary(econ)
+              : 'Cash hit zero — the startup could not cover the launch investment.',
+            stats: { ...state.stats, cash: 0 },
+          })
+          return
+        }
+
         const { city, problem, solutionSummary, npcs, hasLaunchedThisSolution } =
           state
         const grokLaunchApplied = hasLaunchedThisSolution
@@ -434,22 +464,22 @@ export const useGameStore = create<GameStore>()(
         get().logEvent(launchProductEventId(problem.id, economics))
         get().setNpcReactionHistory(economics.npcReactions)
 
-        const nextStats = mergeStatDelta(stats, economics.statDelta)
-        const solutionKey = solutionFingerprint(solutionSummary)
-        const updates: Partial<GameState> = {
+        const currentStats = get().stats
+        if (currentStats.cash < 0) {
+          set({ stats: { ...currentStats, cash: 0 } })
+        }
+
+        set({
           hasLaunchedThisSolution: true,
-          launchedSolutionKey: solutionKey,
-        }
-
-        if (nextStats.cash <= BANKRUPTCY_CASH) {
-          updates.gameOutcome = 'lost'
-          updates.lossReason = 'bankruptcy'
-          updates.lossSummary =
-            'Cash hit zero — the startup could not cover the launch investment.'
-          updates.stats = { ...nextStats, cash: 0 }
-        }
-
-        set(updates)
+          launchedSolutionKey: solutionFingerprint(solutionSummary),
+          lastLaunchEconomics: {
+            investment: economics.investment,
+            revenue: economics.revenue,
+            netCash: economics.netCash,
+            adoptionPercentage: economics.adoptionPercentage,
+            customers: economics.customers,
+          },
+        })
         return true
       },
     }),
@@ -466,6 +496,7 @@ export const useGameStore = create<GameStore>()(
           state.gameOutcome ??= 'playing'
           state.lossReason ??= null
           state.lossSummary ??= null
+          state.lastLaunchEconomics ??= null
         }
       },
     },

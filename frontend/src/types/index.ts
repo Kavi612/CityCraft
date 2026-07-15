@@ -214,6 +214,15 @@ export type LossReason =
   | 'trust_collapse'
   | 'investor_exit'
 
+/** Snapshot saved after AI launch confirm — used for game-over copy. */
+export interface LaunchEconomicsSnapshot {
+  investment: number
+  revenue: number
+  netCash: number
+  adoptionPercentage: number
+  customers: number
+}
+
 /**
  * The single persisted runtime snapshot of an in-progress or completed game.
  * Shape of the Zustand store (Phase 6); serialized to localStorage via persist middleware.
@@ -245,4 +254,5 @@ export interface GameState {
   gameOutcome: GameOutcome
   lossReason: LossReason | null
   lossSummary: string | null
+  lastLaunchEconomics: LaunchEconomicsSnapshot | null
 }

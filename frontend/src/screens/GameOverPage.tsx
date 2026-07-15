@@ -2,6 +2,7 @@ import { AlertTriangle, RotateCcw } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { PrimaryButton } from '@/components/ui/PrimaryButton'
 import { formatFunds } from '@/lib/blueprintUi'
+import { formatRupeeShort } from '@/lib/formatRupee'
 import { useGameStore } from '@/store/gameStore'
 
 export default function GameOverPage() {
@@ -9,6 +10,7 @@ export default function GameOverPage() {
   const stats = useGameStore((state) => state.stats)
   const lossSummary = useGameStore((state) => state.lossSummary)
   const lossReason = useGameStore((state) => state.lossReason)
+  const lastLaunchEconomics = useGameStore((state) => state.lastLaunchEconomics)
   const founder = useGameStore((state) => state.founder)
   const resetGame = useGameStore((state) => state.resetGame)
 
@@ -41,6 +43,51 @@ export default function GameOverPage() {
           <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-stone-400">
             Reason: {lossReason.replace('_', ' ')}
           </p>
+        )}
+
+        {lastLaunchEconomics && (
+          <div className="mt-4 grid grid-cols-2 gap-3 rounded-2xl border border-border bg-background/80 px-4 py-3 text-sm">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                Build cost
+              </p>
+              <p className="mt-1 font-semibold text-stone-800">
+                {formatRupeeShort(lastLaunchEconomics.investment)}
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                Early revenue
+              </p>
+              <p className="mt-1 font-semibold text-stone-800">
+                {formatRupeeShort(lastLaunchEconomics.revenue)}
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                Net launch result
+              </p>
+              <p
+                className={`mt-1 font-semibold ${
+                  lastLaunchEconomics.netCash >= 0
+                    ? 'text-emerald-700'
+                    : 'text-rose-700'
+                }`}
+              >
+                {lastLaunchEconomics.netCash >= 0 ? '+' : '−'}
+                {formatRupeeShort(Math.abs(lastLaunchEconomics.netCash))}
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                Adoption
+              </p>
+              <p className="mt-1 font-semibold text-stone-800">
+                {lastLaunchEconomics.adoptionPercentage}% ·{' '}
+                {lastLaunchEconomics.customers} customers
+              </p>
+            </div>
+          </div>
         )}
 
         <div className="mt-5 rounded-2xl border border-border bg-background/80 px-4 py-3">
