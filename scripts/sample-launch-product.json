@@ -1,0 +1,48 @@
+{
+  "problem": {
+    "name": "Traffic Congestion",
+    "description": "Peak-hour gridlock on OMR, GST Road, and inner-city flyovers costs commuters hours daily and bleeds productivity from Maruthapuram's office corridors."
+  },
+  "solution": {
+    "approach": "AI signal timing using live camera and GPS feeds across 200 junctions",
+    "customer": "Maruthapuram Municipal Corporation transport wing",
+    "revenue": "Annual SaaS license per junction zone to the city corporation",
+    "pricing": "₹18 lakh/year per 50-junction zone (government tier)",
+    "edge": "Ward-level Tamil alerts for auto unions and offline failover at junction boxes"
+  },
+  "cityName": "Maruthapuram",
+  "npcs": [
+    {
+      "id": "meenakshi-devi",
+      "name": "Meenakshi Devi",
+      "profession": "Mayor",
+      "personality": "Charismatic and politically savvy; backs projects that look good on progress reports.",
+      "preferredCategories": ["Smart Civic Services", "Environment", "Mobility & Transport"],
+      "influenceLevel": 5
+    },
+    {
+      "id": "anirudh-prakash",
+      "name": "Anirudh Prakash",
+      "profession": "Venture Capitalist",
+      "personality": "Analytical and direct; asks for unit economics before he asks for vision.",
+      "preferredCategories": ["Small Business", "Manufacturing", "Smart Civic Services"],
+      "influenceLevel": 5
+    },
+    {
+      "id": "revathi-priya",
+      "name": "Revathi Priya",
+      "profession": "Journalist",
+      "personality": "Inquisitive and skeptical; interviews even in casual chat and quotes you back.",
+      "preferredCategories": ["Environment", "Smart Civic Services", "Community Health"],
+      "influenceLevel": 4
+    },
+    {
+      "id": "senthil-velan",
+      "name": "Senthil Velan",
+      "profession": "Transport Commissioner",
+      "personality": "Policy-focused bureaucrat; cites circulars first, softens only on commuter safety.",
+      "preferredCategories": ["Mobility & Transport", "Logistics", "Smart Civic Services"],
+      "influenceLevel": 4
+    }
+  ]
+}

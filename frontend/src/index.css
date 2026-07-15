@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+@config '../tailwind.config.ts';
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100svh;
+}
+
+body {
+  background-color: theme('colors.background');
+  color: #292524;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@utility shadow-card {
+  box-shadow: theme('boxShadow.card');
+}
+
+@utility shadow-card-hover {
+  box-shadow: theme('boxShadow.card-hover');
+}

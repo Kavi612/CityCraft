@@ -1,0 +1,23 @@
+/** Static dashboard map pin positions for 20 NPCs (percent of panel). */
+export const NPC_MAP_PINS: Record<string, { x: number; y: number }> = {
+  'ananya-ravi': { x: 18, y: 22 },
+  'anirudh-prakash': { x: 72, y: 18 },
+  'arul-prakash': { x: 84, y: 38 },
+  'divya-shankar': { x: 42, y: 30 },
+  'gopinath-krishnan': { x: 58, y: 24 },
+  'harish-kumar': { x: 28, y: 48 },
+  'karthik-rajan': { x: 66, y: 52 },
+  'keerthana-mani': { x: 12, y: 62 },
+  'kavitha-anand': { x: 36, y: 68 },
+  'lakshmi-devi': { x: 52, y: 42 },
+  'meenakshi-devi': { x: 48, y: 16 },
+  'muthuvel': { x: 76, y: 66 },
+  'murugan-ravi': { x: 22, y: 78 },
+  'nila-kannan': { x: 62, y: 78 },
+  'perumal-selvan': { x: 88, y: 58 },
+  'pradeep-arun': { x: 32, y: 36 },
+  'revathi-priya': { x: 54, y: 58 },
+  'selvaraj': { x: 8, y: 42 },
+  'senthil-velan': { x: 78, y: 44 },
+  'suresh-kumar': { x: 44, y: 82 },
+}
