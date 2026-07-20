@@ -1,6 +1,7 @@
 import {
   ALWAYS_RELEVANT_NPC_IDS,
 } from '@/data/npcs'
+import { apiUrl } from '@/lib/apiBase'
 import { OTHER_ANSWER_MAX_LENGTH } from '@/lib/solutionQuiz'
 import { solutionFingerprint } from '@/lib/solutionFingerprint'
 import type { City, NPC, Problem, SolutionAnswer, SolutionSummary } from '@/types'
@@ -217,7 +218,7 @@ export function buildLaunchProductRequest(
 export async function fetchLaunchProductVerification(
   body: LaunchProductRequestBody,
 ): Promise<LaunchProductResponse> {
-  const response = await fetch('/api/launch-product', {
+  const response = await fetch(apiUrl('/api/launch-product'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

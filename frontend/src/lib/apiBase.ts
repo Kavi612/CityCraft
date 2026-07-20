@@ -1,0 +1,7 @@
+/** Backend base URL in production (Render). Leave empty locally — Vite proxies /api to :3000. */
+const API_BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
+
+export function apiUrl(path: string): string {
+  const normalized = path.startsWith('/') ? path : `/${path}`
+  return API_BASE ? `${API_BASE}${normalized}` : normalized
+}

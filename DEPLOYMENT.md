@@ -84,7 +84,24 @@ The frontend calls `/api/launch-product` with a relative URL. Vercel proxies tho
 | **Build Command** | `npm run build` |
 | **Output Directory** | `dist` |
 
-5. Deploy — no environment variables needed on Vercel (API is proxied via `vercel.json`)
+5. Deploy — connect frontend to backend using **one** of these options:
+
+   **Option A — Vercel environment variable (easiest)**
+
+   | Key | Value |
+   |-----|--------|
+   | `VITE_API_URL` | `https://YOUR-SERVICE.onrender.com` |
+
+   No trailing slash. Redeploy after saving.
+
+   **Option B — `vercel.json` rewrite** (no env var)
+
+   Edit `frontend/vercel.json` before deploy — replace the placeholder with your Render URL:
+
+   ```json
+   "destination": "https://YOUR-SERVICE.onrender.com/api/:path*"
+   ```
+
 6. Open your Vercel URL and test **Launch Product**
 
 ---
