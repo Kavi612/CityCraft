@@ -103,10 +103,10 @@ export default function DashboardHomePage() {
   }
 
   return (
-    <div className="flex h-full flex-col gap-4 overflow-hidden">
+    <div className="flex min-h-full flex-col gap-4 overflow-y-auto pb-2 lg:h-full lg:overflow-hidden lg:pb-0">
       <StatCards stats={stats} compact />
 
-      <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-2">
+      <div className="grid flex-1 gap-4 lg:min-h-0 lg:grid-cols-2">
         <CompanyActions className="h-full" onActionTaken={handleActionTaken} />
         <RecentActivity activities={activities} className="h-full" />
       </div>

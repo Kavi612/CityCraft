@@ -4,11 +4,14 @@ import type { City } from '@/types'
 type CityAboutCardProps = {
   city: City
   description: string
+  className?: string
 }
 
-export function CityAboutCard({ city, description }: CityAboutCardProps) {
+export function CityAboutCard({ city, description, className = '' }: CityAboutCardProps) {
   return (
-    <div className="pointer-events-auto absolute left-3 top-3 z-20 max-w-52 rounded-2xl border border-white/15 bg-black/50 p-3 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-md sm:left-4 sm:top-4 sm:max-w-60 sm:p-4">
+    <div
+      className={`pointer-events-auto absolute left-2 top-2 z-20 max-w-[calc(100%-1rem)] rounded-2xl border border-white/15 bg-black/50 p-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-md sm:left-4 sm:top-4 sm:max-w-60 sm:p-4 md:max-w-52 ${className}`}
+    >
       <div className="flex items-center gap-2.5">
         <img
           src={city.categoryImage}

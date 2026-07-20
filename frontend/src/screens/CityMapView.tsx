@@ -96,7 +96,7 @@ export default function CityMapView() {
   }
 
   return (
-    <div className="relative flex h-svh flex-col overflow-hidden bg-[#070b14] text-white">
+    <div className="relative flex h-dvh max-h-dvh flex-col overflow-hidden bg-[#070b14] text-white">
       <FloatingBackdrop />
 
       <CityMapHeader
@@ -106,12 +106,12 @@ export default function CityMapView() {
         turn={turn || 1}
       />
 
-      <div className="relative z-10 min-h-0 flex-1 px-3 sm:px-5">
-        <div className="relative h-full overflow-hidden rounded-2xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col px-3 pb-2 sm:px-5">
+        <div className="relative min-h-[min(52dvh,420px)] w-full flex-1 overflow-hidden rounded-2xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           <img
             src={city.backgroundImage}
             alt={`${city.name} map`}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover object-center"
           />
           <div
             className={`absolute inset-0 transition-colors ${
@@ -124,6 +124,7 @@ export default function CityMapView() {
           <CityAboutCard
             city={city}
             description={cityMeta?.motto ?? city.description}
+            className="hidden sm:block"
           />
 
           <div className="absolute inset-0">
@@ -140,26 +141,36 @@ export default function CityMapView() {
           </div>
 
           {selectedCategory && (
-            <ProblemDetailPanel
-              city={city}
-              category={selectedCategory}
-              problem={selectedProblem}
-              onSelectProblem={setSelectedProblem}
-              onBackToProblems={() => setSelectedProblem(null)}
-              onConfirm={handleConfirmProblem}
-              onClose={closePanel}
-            />
+            <>
+              <button
+                type="button"
+                aria-label="Close problem panel"
+                onClick={closePanel}
+                className="fixed inset-0 z-40 bg-black/50 md:hidden"
+              />
+              <ProblemDetailPanel
+                city={city}
+                category={selectedCategory}
+                problem={selectedProblem}
+                onSelectProblem={setSelectedProblem}
+                onBackToProblems={() => setSelectedProblem(null)}
+                onConfirm={handleConfirmProblem}
+                onClose={closePanel}
+              />
+            </>
           )}
         </div>
       </div>
 
-      <MapFooterFilters
-        categories={city.categories}
-        filterCategory={filterCategory}
-        heatMapEnabled={heatMapEnabled}
-        onFilterChange={handleFilterChange}
-        onHeatMapToggle={() => setHeatMapEnabled((value) => !value)}
-      />
+      {!selectedCategory && (
+        <MapFooterFilters
+          categories={city.categories}
+          filterCategory={filterCategory}
+          heatMapEnabled={heatMapEnabled}
+          onFilterChange={handleFilterChange}
+          onHeatMapToggle={() => setHeatMapEnabled((value) => !value)}
+        />
+      )}
     </div>
   )
 }

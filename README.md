@@ -50,7 +50,7 @@ cd "path\to\CityCraft"
 ```powershell
 npm run install:all
 ```
-
+c
 **Option B — install separately:**
 
 ```powershell
@@ -194,11 +194,13 @@ Then start the backend again.
 
 ---
 
-## Production build
+## Production deployment
+
+Deploy **backend → Render**, **frontend → Vercel**. See [DEPLOYMENT.md](./DEPLOYMENT.md) for step-by-step instructions.
 
 ```powershell
 cd frontend
 npm run build
 ```
 
-Output goes to `frontend/dist/`. Deploy the frontend as static files and the backend as a Node server (or split to your hosting provider).
+Output goes to `frontend/dist/` (Vercel builds this automatically on deploy).

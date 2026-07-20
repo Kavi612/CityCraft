@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { DashboardProvider } from '@/context/DashboardContext'
+import { DashboardMobileNav } from '@/components/dashboard/DashboardMobileNav'
 import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar'
 import { DashboardTopBar } from '@/components/dashboard/DashboardTopBar'
 import { useDashboardBootstrap } from '@/hooks/useDashboardBootstrap'
@@ -83,9 +84,14 @@ export default function DashboardLayout() {
             onNotificationsClick={() => navigate(DASHBOARD_PATHS.notifications)}
           />
 
-          <main className="min-h-0 flex-1 overflow-hidden px-4 py-4 sm:px-6 sm:py-5">
+          <main className="min-h-0 flex-1 overflow-y-auto px-3 py-3 sm:px-6 sm:py-5 lg:overflow-hidden">
             <Outlet />
           </main>
+
+          <DashboardMobileNav
+            currentPath={location.pathname}
+            onNavigate={(path) => navigate(path)}
+          />
         </div>
       </div>
     </DashboardProvider>

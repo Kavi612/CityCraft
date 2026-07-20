@@ -54,8 +54,8 @@ export function BlueprintOverviewPanel({
   const npcs = getInterestedNpcs(category?.name ?? '', 5)
 
   return (
-    <aside className="hidden h-full w-64 shrink-0 flex-col gap-2 xl:flex xl:w-72">
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0a101c]/92 p-3 shadow-[0_16px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+    <aside className="flex w-full shrink-0 flex-col gap-2 lg:h-full lg:w-64 xl:w-72">
+      <div className="flex max-h-64 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0a101c]/92 p-3 shadow-[0_16px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:max-h-72 lg:max-h-none lg:min-h-0 lg:flex-1">
         <p className="shrink-0 text-[10px] font-bold uppercase tracking-[0.16em] text-white/45">
           Problem Overview
         </p>

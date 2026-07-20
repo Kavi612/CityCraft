@@ -118,7 +118,7 @@ export default function CompanySetup() {
   }
 
   return (
-    <div className="relative flex h-svh flex-col overflow-hidden bg-[#070b14] text-white">
+    <div className="relative flex min-h-svh flex-col overflow-y-auto bg-[#070b14] text-white">
       <img
         src={QUIZ_BG}
         alt=""
@@ -126,7 +126,7 @@ export default function CompanySetup() {
       />
       <div className="pointer-events-none absolute inset-0 bg-[#070b14]/60" />
 
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-5xl flex-col px-4 py-4 sm:px-6 sm:py-5">
+      <div className="relative z-10 mx-auto flex min-h-svh w-full max-w-5xl flex-col px-4 py-4 sm:px-6 sm:py-5">
         <header className="shrink-0">
           <button
             type="button"
@@ -187,7 +187,7 @@ export default function CompanySetup() {
         )}
 
         <motion.div
-          className="mt-4 grid min-h-0 flex-1 gap-4 lg:grid-cols-[1fr_1.1fr]"
+          className="mt-4 grid min-h-0 flex-1 gap-4 md:grid-cols-2 lg:grid-cols-[1fr_1.1fr]"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35 }}
@@ -297,7 +297,7 @@ export default function CompanySetup() {
           </section>
         </motion.div>
 
-        <footer className="mt-4 flex shrink-0 flex-wrap items-center justify-end gap-2">
+        <footer className="mt-4 flex shrink-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
           <span
             title={
               hasLaunchedThisSolution

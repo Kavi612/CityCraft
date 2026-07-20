@@ -108,12 +108,10 @@ function npcMatchesCategory(npc: NPC, categoryName: string): boolean {
 }
 
 /** Category-matched NPCs plus Mayor, VC, and Journalist — deduped. */
-export function selectRelevantNpcs(
+export function selectRelevantNpcsForCategory(
   npcs: NPC[],
-  city: City,
-  problem: Problem,
+  categoryName: string,
 ): NPC[] {
-  const categoryName = findProblemCategoryName(city, problem)
   const selected = new Map<string, NPC>()
 
   for (const npc of npcs) {
@@ -133,6 +131,51 @@ export function selectRelevantNpcs(
   }
 
   return [...selected.values()]
+}
+
+/** Category-matched NPCs plus Mayor, VC, and Journalist — deduped. */
+export function selectRelevantNpcs(
+  npcs: NPC[],
+  city: City,
+  problem: Problem,
+): NPC[] {
+  const categoryName = findProblemCategoryName(city, problem)
+  return selectRelevantNpcsForCategory(npcs, categoryName)
+}
+
+export type CustomProblemDraft = {
+  name: string
+  description: string
+  categoryName: string
+}
+
+export function buildCustomProblemTestRequest(
+  city: City,
+  customProblem: CustomProblemDraft,
+  solution: SolutionSummary,
+  npcs: NPC[],
+): LaunchProductRequestBody {
+  const relevant = selectRelevantNpcsForCategory(
+    npcs,
+    customProblem.categoryName,
+  )
+
+  return {
+    problem: {
+      name: customProblem.name.trim(),
+      description: customProblem.description.trim(),
+    },
+    solution: sanitizeSolutionForGrok(solution),
+    cityName: city.name,
+    npcs: relevant.map((npc) => ({
+      id: npc.id,
+      name: npc.name,
+      profession: npc.profession,
+      personality: npc.personality,
+      preferredCategories: npc.preferredCategories,
+      influenceLevel: npc.influenceLevel,
+    })),
+  }
 }
 
 export function buildLaunchProductRequest(

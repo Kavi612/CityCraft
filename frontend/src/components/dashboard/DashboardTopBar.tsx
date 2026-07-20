@@ -34,14 +34,15 @@ export function DashboardTopBar({
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-2 text-sm font-medium text-stone-600"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-2.5 py-2 text-sm font-medium text-stone-600 sm:px-3"
           >
             <CalendarDays className="h-4 w-4 text-primary" aria-hidden="true" />
-            {formatGameDate(turn)}
-            <ChevronDown className="h-4 w-4 text-stone-400" aria-hidden="true" />
+            <span className="hidden sm:inline">{formatGameDate(turn)}</span>
+            <span className="sm:hidden">T{turn}</span>
+            <ChevronDown className="hidden h-4 w-4 text-stone-400 sm:block" aria-hidden="true" />
           </button>
 
           <button

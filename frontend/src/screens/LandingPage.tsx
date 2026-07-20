@@ -79,13 +79,13 @@ function SectionHeading() {
 
 function HowItWorksSteps() {
   return (
-    <div className="mt-3 flex items-stretch justify-center gap-1 sm:gap-2">
+    <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:items-stretch sm:justify-center sm:gap-2">
       {steps.map((step, index) => {
         const Icon = step.icon
 
         return (
           <div key={step.title} className="flex items-center gap-1 sm:gap-1.5">
-            <article className="relative w-18 rounded-xl border border-border bg-surface px-1.5 pb-2 pt-4 shadow-card sm:w-34 sm:rounded-2xl sm:px-2 sm:pb-3 sm:pt-5 lg:w-40">
+            <article className="relative w-full rounded-xl border border-border bg-surface px-2 pb-2 pt-4 shadow-card sm:w-34 sm:rounded-2xl sm:px-2 sm:pb-3 sm:pt-5 lg:w-40">
               <span className="absolute -top-2.5 left-1/2 flex h-5 w-5 -translate-x-1/2 items-center justify-center rounded-full bg-linear-to-br from-primary to-amber-400 text-[10px] font-bold text-white shadow-card sm:h-6 sm:w-6 sm:text-xs">
                 {step.number}
               </span>
@@ -100,10 +100,10 @@ function HowItWorksSteps() {
                     aria-hidden="true"
                   />
                 </div>
-                <h3 className="mt-1.5 text-[9px] font-extrabold leading-tight text-[#0E1628] sm:mt-2 sm:text-xs lg:text-sm">
+                <h3 className="mt-1.5 text-[10px] font-extrabold leading-tight text-[#0E1628] sm:mt-2 sm:text-xs lg:text-sm">
                   {step.title}
                 </h3>
-                <p className="mt-0.5 hidden text-[10px] font-medium leading-snug text-navy sm:line-clamp-3 sm:block lg:text-[11px]">
+                <p className="mt-0.5 line-clamp-2 text-[10px] font-medium leading-snug text-navy sm:line-clamp-3 lg:text-[11px]">
                   {step.description}
                 </p>
               </div>
@@ -111,7 +111,7 @@ function HowItWorksSteps() {
 
             {index < steps.length - 1 && (
               <ChevronRight
-                className="h-3.5 w-3.5 shrink-0 text-primary sm:h-4 sm:w-4"
+                className="hidden h-3.5 w-3.5 shrink-0 text-primary sm:block sm:h-4 sm:w-4"
                 aria-hidden="true"
               />
             )}
@@ -126,7 +126,7 @@ export default function LandingPage() {
   const navigate = useNavigate()
 
   return (
-    <div className="flex h-svh flex-col overflow-hidden bg-background font-sans">
+    <div className="flex min-h-svh flex-col overflow-y-auto bg-background font-sans">
       {/* Hero — top portion */}
       <section className="relative min-h-0 flex-[1.15] overflow-hidden">
         <div

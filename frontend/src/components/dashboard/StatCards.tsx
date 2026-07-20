@@ -110,8 +110,8 @@ export function StatCards({ stats, compact = false }: StatCardsProps) {
     <div
       className={`grid shrink-0 gap-2 sm:gap-3 ${
         compact
-          ? 'grid-cols-3 sm:grid-cols-5 xl:grid-cols-9'
-          : 'grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-9'
+          ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-9'
+          : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-9'
       }`}
     >
       {STAT_CARDS.map((card) => {

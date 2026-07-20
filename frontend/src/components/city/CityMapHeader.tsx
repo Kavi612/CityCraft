@@ -58,7 +58,12 @@ export function CityMapHeader({ city, meta, cash, turn }: CityMapHeaderProps) {
         </div>
       </div>
 
-      <div className="hidden flex-wrap items-center justify-center gap-2 lg:flex">
+      <div className="flex flex-wrap items-center gap-1.5 md:hidden">
+        <StatPill icon={Coins} label="Cash" value={formatCash(cash)} accent="text-emerald-300" />
+        <StatPill icon={BarChart3} label="Day" value={`Day ${turn || 1}`} />
+      </div>
+
+      <div className="hidden flex-wrap items-center justify-center gap-2 md:flex lg:flex">
         <StatPill icon={Users} label="Population" value={meta.population} />
         <StatPill
           icon={TrendingUp}
@@ -76,7 +81,7 @@ export function CityMapHeader({ city, meta, cash, turn }: CityMapHeaderProps) {
         />
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="hidden items-center gap-2 md:flex">
         <IconCircleButton icon={Bell} label="Notifications" />
         <IconCircleButton icon={Trophy} label="Achievements" />
         <IconCircleButton icon={Settings} label="Settings" />

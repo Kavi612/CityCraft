@@ -33,12 +33,12 @@ export function MapCategoryPin({
         }`}
       >
         <span
-          className={`flex h-14 w-14 items-center justify-center rounded-full bg-[#0c1220]/95 ring-4 backdrop-blur-sm sm:h-16 sm:w-16 ${theme.ring} ${active ? theme.glow : ''}`}
+          className={`flex h-11 w-11 items-center justify-center rounded-full bg-[#0c1220]/95 ring-2 backdrop-blur-sm sm:h-14 sm:w-14 sm:ring-4 ${theme.ring} ${active ? theme.glow : ''}`}
         >
           <img
             src={category.icon}
             alt=""
-            className="h-8 w-8 object-contain sm:h-10 sm:w-10"
+            className="h-6 w-6 object-contain sm:h-8 sm:w-8 md:h-10 md:w-10"
           />
         </span>
 

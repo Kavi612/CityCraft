@@ -1,4 +1,5 @@
-import { LayoutGrid, Map } from 'lucide-react'
+import { LayoutGrid, Map, FlaskConical } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { getCategoryTheme } from '@/lib/categoryMapUi'
 import type { Category } from '@/types'
 
@@ -17,10 +18,12 @@ export function MapFooterFilters({
   onFilterChange,
   onHeatMapToggle,
 }: MapFooterFiltersProps) {
+  const navigate = useNavigate()
+
   return (
     <footer className="relative z-20 shrink-0 px-3 pb-3 pt-1 sm:px-5 sm:pb-4">
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/45 px-3 py-2.5 backdrop-blur-md sm:px-4">
-        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <FilterPill
             active={filterCategory === null}
             onClick={() => onFilterChange(null)}
@@ -60,9 +63,19 @@ export function MapFooterFilters({
         </button>
       </div>
 
-      <p className="mt-2 text-center text-[10px] text-white/40 sm:text-xs">
-        Click a category marker to see its problems, then pick one to solve.
-      </p>
+      <div className="mt-2 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
+        <p className="text-center text-[10px] text-white/40 sm:text-xs">
+          Tap a category marker to see problems, or test your own idea first.
+        </p>
+        <button
+          type="button"
+          onClick={() => navigate('/test-solution')}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-primary/35 bg-primary/10 px-3 py-1 text-[11px] font-semibold text-primary hover:bg-primary/20"
+        >
+          <FlaskConical className="h-3.5 w-3.5" aria-hidden="true" />
+          Test your problem
+        </button>
+      </div>
     </footer>
   )
 }
@@ -88,7 +101,7 @@ function FilterPill({
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[11px] font-semibold transition-colors ${
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[11px] font-semibold whitespace-nowrap transition-colors ${
         active
           ? (accentClass ?? 'bg-white/15 text-white')
           : 'bg-white/5 text-white/70 hover:bg-white/10'

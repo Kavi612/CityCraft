@@ -8,6 +8,7 @@ import GameOverPage from '@/screens/GameOverPage'
 import LandingPage from '@/screens/LandingPage'
 import SolutionQuiz from '@/screens/SolutionQuiz'
 import StyleGuide from '@/screens/StyleGuide'
+import TestSolutionPage from '@/screens/TestSolutionPage'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/founder" element={<ChooseFounder />} />
         <Route path="/city" element={<ChooseCity />} />
         <Route path="/city-map" element={<CityMapView />} />
+        <Route path="/test-solution" element={<TestSolutionPage />} />
         <Route path="/quiz" element={<SolutionQuiz />} />
         <Route path="/company-setup" element={<CompanySetup />} />
         <Route path="/game-over" element={<GameOverPage />} />

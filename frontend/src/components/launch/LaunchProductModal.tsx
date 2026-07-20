@@ -221,7 +221,7 @@ export function LaunchProductModal({ open, onClose, onConfirmed }: LaunchProduct
                   <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500">
                     Projected launch P&amp;L
                   </p>
-                  <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+                  <div className="mt-2 grid grid-cols-1 gap-2 text-xs sm:grid-cols-2">
                     <div>
                       <p className="text-stone-500">Early revenue</p>
                       <p className="font-semibold text-stone-800">

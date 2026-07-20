@@ -1,24 +1,20 @@
-import { ArrowRight } from 'lucide-react'
 import {
-  BarChart3,
-  Bell,
-  LayoutDashboard,
-  Map,
-  MessageCircle,
-  Settings,
-  Trophy,
-} from 'lucide-react'
+  DASHBOARD_NAV_ITEMS,
+} from '@/components/dashboard/DashboardMobileNav'
+import { ArrowRight } from 'lucide-react'
 import { DASHBOARD_PATHS } from '@/lib/dashboardUtils'
 
-const NAV_ITEMS = [
-  { path: DASHBOARD_PATHS.dashboard, label: 'Dashboard', icon: LayoutDashboard },
-  { path: DASHBOARD_PATHS['city-map'], label: 'City Map', icon: Map },
-  { path: DASHBOARD_PATHS.reactions, label: 'Reactions', icon: MessageCircle },
-  { path: DASHBOARD_PATHS.reports, label: 'Reports', icon: BarChart3 },
-  { path: DASHBOARD_PATHS.leaderboard, label: 'Leaderboard', icon: Trophy },
-  { path: DASHBOARD_PATHS.notifications, label: 'Notifications', icon: Bell },
-  { path: DASHBOARD_PATHS.settings, label: 'Settings', icon: Settings },
-] as const
+const NAV_ITEMS = DASHBOARD_NAV_ITEMS.map((item) => ({
+  ...item,
+  label:
+    item.path === DASHBOARD_PATHS.dashboard
+      ? 'Dashboard'
+      : item.path === DASHBOARD_PATHS.leaderboard
+        ? 'Leaderboard'
+        : item.path === DASHBOARD_PATHS.notifications
+          ? 'Notifications'
+          : item.label,
+}))
 
 type DashboardSidebarProps = {
   startupName: string

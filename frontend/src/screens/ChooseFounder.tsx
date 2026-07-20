@@ -40,10 +40,10 @@ export default function ChooseFounder() {
   }
 
   return (
-    <div className="relative h-svh overflow-hidden bg-[#070b14] text-white">
+    <div className="relative min-h-svh overflow-y-auto bg-[#070b14] text-white">
       <FloatingBackdrop />
 
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-5">
+      <div className="relative z-10 mx-auto flex min-h-svh w-full max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-5">
         {/* Header */}
         <motion.header
           className="shrink-0"
@@ -67,10 +67,10 @@ export default function ChooseFounder() {
 
         {/* Cards grid — fills remaining height */}
         <div
-          className="min-h-0 flex-1 py-3 perspective-[1000px] sm:py-4"
+          className="py-3 perspective-[1000px] sm:py-4"
           style={{ transformStyle: 'preserve-3d' }}
         >
-          <div className="grid h-full grid-cols-2 grid-rows-3 gap-3 sm:grid-cols-3 sm:grid-rows-2 sm:gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 md:gap-4">
             {avatars.map((avatar, index) => (
               <FounderAvatarCard
                 key={avatar.id}

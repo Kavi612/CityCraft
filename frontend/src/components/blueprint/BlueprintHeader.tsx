@@ -13,7 +13,7 @@ export function BlueprintHeader({ city, cash, turn }: BlueprintHeaderProps) {
   const navigate = useNavigate()
 
   return (
-    <header className="relative z-20 flex shrink-0 flex-wrap items-center justify-between gap-2">
+    <header className="relative z-20 flex shrink-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
       <div className="flex items-center gap-2 sm:gap-3">
         <button
           type="button"
@@ -30,16 +30,16 @@ export function BlueprintHeader({ city, cash, turn }: BlueprintHeaderProps) {
         />
       </div>
 
-      <div className="flex-1 text-center">
+      <div className="flex-1 text-center sm:px-2">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
           City Craft
         </p>
-        <h1 className="text-sm font-extrabold uppercase tracking-wide sm:text-lg">
+        <h1 className="text-xs font-extrabold uppercase tracking-wide sm:text-lg">
           YOUR STARTUP BLUEPRINT
         </h1>
       </div>
 
-      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-1.5 sm:justify-end sm:gap-2">
         <StatPill icon={MapPin} label="City" value={city.name} />
         <StatPill label="Day" value={`Day ${turn || 1}`} />
         <StatPill label="Funds" value={formatFunds(cash)} accent />

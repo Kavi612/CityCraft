@@ -25,10 +25,10 @@ export default function ChooseCity() {
   }
 
   return (
-    <div className="relative h-svh overflow-hidden bg-[#070b14] text-white">
+    <div className="relative min-h-svh overflow-y-auto bg-[#070b14] text-white">
       <FloatingBackdrop />
 
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-5">
+      <div className="relative z-10 mx-auto flex min-h-svh w-full max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-5">
         <motion.header
           className="shrink-0 text-center sm:text-left"
           initial={{ opacity: 0, y: -10 }}
@@ -52,8 +52,8 @@ export default function ChooseCity() {
           </p>
         </motion.header>
 
-        <div className="min-h-0 flex-1 py-4 sm:py-5">
-          <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
+        <div className="py-4 sm:py-5">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
             {cities.map((city, index) => (
               <CitySelectionCard
                 key={city.id}

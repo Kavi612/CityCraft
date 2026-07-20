@@ -20,6 +20,7 @@ type ExpenseChartProps = {
   totalRevenue: number
 }
 
+const CHART_HEIGHT_MOBILE = 220
 
 export function ExpenseChart({
   items,
@@ -31,20 +32,23 @@ export function ExpenseChart({
 
   if (grouped.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-border bg-background/60 p-6 text-sm text-stone-400">
+      <div className="flex min-h-[12rem] items-center justify-center rounded-2xl border border-dashed border-border bg-background/60 p-6 text-center text-sm text-stone-400">
         No expenses recorded yet. Launch or take an action to see your burn.
       </div>
     )
   }
 
   return (
-    <div className="grid h-full min-h-0 gap-4 lg:grid-cols-[1.1fr_1fr]">
-      <div className="flex min-h-0 flex-col rounded-2xl border border-border bg-background/60 p-4">
-        <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-stone-400">
+    <div className="flex flex-col gap-4 lg:grid lg:h-full lg:min-h-0 lg:grid-cols-2 lg:grid-rows-[auto_auto_1fr] lg:gap-4">
+      <div className="rounded-2xl border border-border bg-background/60 p-4">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-stone-400">
           Spend by Category
         </p>
-        <div className="min-h-0 flex-1">
-          <ResponsiveContainer width="100%" height="100%" minHeight={180}>
+        <div
+          className="w-full lg:min-h-0 lg:flex-1"
+          style={{ height: CHART_HEIGHT_MOBILE }}
+        >
+          <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={grouped}
@@ -52,8 +56,8 @@ export function ExpenseChart({
                 nameKey="label"
                 cx="50%"
                 cy="50%"
-                innerRadius={48}
-                outerRadius={78}
+                innerRadius="42%"
+                outerRadius="72%"
                 paddingAngle={2}
               >
                 {grouped.map((entry) => (
@@ -70,22 +74,38 @@ export function ExpenseChart({
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-col rounded-2xl border border-border bg-background/60 p-4">
-        <p className="shrink-0 text-xs font-semibold uppercase tracking-wider text-stone-400">
+      <div className="rounded-2xl border border-border bg-background/60 p-4">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-stone-400">
           Category Breakdown
         </p>
-        <div className="min-h-0 flex-1">
-          <ResponsiveContainer width="100%" height="100%" minHeight={180}>
-            <BarChart data={grouped} layout="vertical" margin={{ left: 8, right: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E7E0D4" />
-              <XAxis type="number" tickFormatter={(v) => `₹${Math.round(v / 1000)}k`} />
-              <YAxis type="category" dataKey="label" width={100} tick={{ fontSize: 10 }} />
+        <div
+          className="w-full lg:min-h-0 lg:flex-1"
+          style={{ height: Math.max(CHART_HEIGHT_MOBILE, grouped.length * 36 + 40) }}
+        >
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={grouped}
+              layout="vertical"
+              margin={{ left: 4, right: 12, top: 4, bottom: 4 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#E7E0D4" horizontal={false} />
+              <XAxis
+                type="number"
+                tick={{ fontSize: 10 }}
+                tickFormatter={(v) => `₹${Math.round(v / 1000)}k`}
+              />
+              <YAxis
+                type="category"
+                dataKey="label"
+                width={88}
+                tick={{ fontSize: 10 }}
+              />
               <Tooltip
                 formatter={(value) =>
                   typeof value === 'number' ? formatFunds(value) : ''
                 }
               />
-              <Bar dataKey="amount" radius={[0, 6, 6, 0]}>
+              <Bar dataKey="amount" radius={[0, 6, 6, 0]} maxBarSize={18}>
                 {grouped.map((entry) => (
                   <Cell key={entry.category} fill={entry.color} />
                 ))}
@@ -95,7 +115,7 @@ export function ExpenseChart({
         </div>
       </div>
 
-      <div className="lg:col-span-2 grid shrink-0 grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:col-span-2">
         <SummaryPill label="Revenue" value={formatFunds(totalRevenue)} tone="positive" />
         <SummaryPill label="Expenses" value={formatFunds(totalExpenses)} tone="negative" />
         <SummaryPill
@@ -105,19 +125,19 @@ export function ExpenseChart({
         />
       </div>
 
-      <div className="lg:col-span-2 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+      <div className="space-y-2 lg:col-span-2 lg:max-h-[min(16rem,30vh)] lg:overflow-y-auto lg:pr-1">
         {items.map((item) => (
           <div
             key={item.label}
-            className="flex items-center justify-between rounded-xl border border-border bg-surface px-3 py-2"
+            className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-3 py-2.5"
           >
-            <div>
-              <p className="text-sm font-medium text-stone-800">{item.label}</p>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium text-stone-800">{item.label}</p>
               <p className="text-[10px] uppercase tracking-wider text-stone-400">
                 {item.category}
               </p>
             </div>
-            <p className="text-sm font-bold text-stone-700">
+            <p className="shrink-0 text-sm font-bold text-stone-700">
               {formatFunds(item.amount)}
             </p>
           </div>
@@ -142,7 +162,7 @@ function SummaryPill({
         {label}
       </p>
       <p
-        className={`mt-0.5 text-sm font-bold ${
+        className={`mt-0.5 text-sm font-bold sm:text-base ${
           tone === 'positive' ? 'text-emerald-600' : 'text-rose-600'
         }`}
       >
