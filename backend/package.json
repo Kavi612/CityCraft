@@ -5,11 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch --env-file=.env.local src/server.ts",
-    "start": "tsx --env-file=.env.local src/server.ts",
+    "start": "tsx src/server.ts",
     "build": "tsc"
   },
   "dependencies": {
-    "city-craft": "file:..",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2"

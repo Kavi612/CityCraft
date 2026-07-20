@@ -16,6 +16,7 @@ import type { NPC } from '@/types'
 type LaunchProductModalProps = {
   open: boolean
   onClose: () => void
+  onConfirmed?: (bankrupt: boolean) => void
 }
 
 type ViewState = 'loading' | 'success' | 'error'
@@ -24,7 +25,7 @@ function npcById(npcs: NPC[], id: string): NPC | undefined {
   return npcs.find((npc) => npc.id === id)
 }
 
-export function LaunchProductModal({ open, onClose }: LaunchProductModalProps) {
+export function LaunchProductModal({ open, onClose, onConfirmed }: LaunchProductModalProps) {
   const city = useGameStore((state) => state.city)
   const problem = useGameStore((state) => state.problem)
   const solutionSummary = useGameStore((state) => state.solutionSummary)
@@ -108,7 +109,19 @@ export function LaunchProductModal({ open, onClose }: LaunchProductModalProps) {
       return
     }
 
-    applyLaunchProductResult(result)
+    const applied = applyLaunchProductResult(result)
+    const state = useGameStore.getState()
+    const bankrupt =
+      !applied && state.hasLaunchedThisSolution
+        ? state.stats.cash <= 0
+        : state.gameOutcome === 'lost' || state.stats.cash <= 0
+
+    if (!applied && !state.hasLaunchedThisSolution) {
+      onClose()
+      return
+    }
+
+    onConfirmed?.(bankrupt)
     onClose()
   }
 

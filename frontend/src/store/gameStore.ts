@@ -465,20 +465,29 @@ export const useGameStore = create<GameStore>()(
         get().setNpcReactionHistory(economics.npcReactions)
 
         const currentStats = get().stats
-        if (currentStats.cash < 0) {
-          set({ stats: { ...currentStats, cash: 0 } })
+        const finalCash = Math.max(0, currentStats.cash)
+        const isBankrupt = finalCash <= 0
+
+        const launchSnapshot = {
+          investment: economics.investment,
+          revenue: economics.revenue,
+          netCash: economics.netCash,
+          adoptionPercentage: economics.adoptionPercentage,
+          customers: economics.customers,
         }
 
         set({
+          stats: { ...currentStats, cash: finalCash },
           hasLaunchedThisSolution: true,
           launchedSolutionKey: solutionFingerprint(solutionSummary),
-          lastLaunchEconomics: {
-            investment: economics.investment,
-            revenue: economics.revenue,
-            netCash: economics.netCash,
-            adoptionPercentage: economics.adoptionPercentage,
-            customers: economics.customers,
-          },
+          lastLaunchEconomics: launchSnapshot,
+          ...(isBankrupt
+            ? {
+                gameOutcome: 'lost' as const,
+                lossReason: 'bankruptcy' as const,
+                lossSummary: buildBankruptcySummary(launchSnapshot),
+              }
+            : {}),
         })
         return true
       },
@@ -497,6 +506,17 @@ export const useGameStore = create<GameStore>()(
           state.lossReason ??= null
           state.lossSummary ??= null
           state.lastLaunchEconomics ??= null
+
+          if (
+            state.hasLaunchedThisSolution &&
+            state.stats.cash <= 0 &&
+            state.gameOutcome === 'playing' &&
+            state.lastLaunchEconomics
+          ) {
+            state.gameOutcome = 'lost'
+            state.lossReason = 'bankruptcy'
+            state.lossSummary = buildBankruptcySummary(state.lastLaunchEconomics)
+          }
         }
       },
     },

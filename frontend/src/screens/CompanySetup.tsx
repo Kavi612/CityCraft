@@ -44,6 +44,7 @@ export default function CompanySetup() {
   const [founderName, setFounderName] = useState(founder?.name ?? '')
   const [startupName, setStartupName] = useState(founder?.startupName ?? '')
   const [showLaunchModal, setShowLaunchModal] = useState(false)
+  const [highlightLaunchResult, setHighlightLaunchResult] = useState(false)
 
   useEffect(() => {
     if (!founder?.avatarId || !city || !problem || !solutionSummary) {
@@ -100,6 +101,22 @@ export default function CompanySetup() {
     setShowLaunchModal(false)
   }
 
+  const handleLaunchConfirmed = (bankrupt: boolean) => {
+    if (bankrupt) {
+      const trimmedStartup = startupName.trim()
+      if (trimmedStartup) {
+        useGameStore.getState().setFounder({
+          name: founderName.trim() || founder?.name || 'Founder',
+          startupName: trimmedStartup,
+          avatarId: founder.avatarId,
+        })
+      }
+      navigate('/game-over', { replace: true })
+      return
+    }
+    setHighlightLaunchResult(true)
+  }
+
   return (
     <div className="relative flex h-svh flex-col overflow-hidden bg-[#070b14] text-white">
       <img
@@ -135,6 +152,39 @@ export default function CompanySetup() {
             <StepIndicator steps={4} currentStep={4} />
           </div>
         </header>
+
+        {hasLaunchedThisSolution && lastLaunchEconomics && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`mt-4 shrink-0 rounded-2xl border px-4 py-3 ${
+              highlightLaunchResult ? 'ring-2 ring-primary/60' : ''
+            } ${
+              stats.cash <= 0
+                ? 'border-rose-400/40 bg-rose-950/50'
+                : lastLaunchEconomics.netCash >= 0
+                  ? 'border-emerald-400/35 bg-emerald-950/40'
+                  : 'border-amber-400/35 bg-amber-950/40'
+            }`}
+          >
+            <p className="text-[10px] font-bold uppercase tracking-wider text-primary">
+              Product launch recorded
+            </p>
+            <p className="mt-1 text-sm font-semibold text-white">
+              {stats.cash <= 0
+                ? 'This launch wiped your runway — see Game Over for the full breakdown.'
+                : lastLaunchEconomics.netCash >= 0
+                  ? `Net gain of ${formatRupeeShort(lastLaunchEconomics.netCash)} — launch the startup to enter the dashboard.`
+                  : `Net loss of ${formatRupeeShort(Math.abs(lastLaunchEconomics.netCash))} — you still have ${formatFunds(stats.cash)} left.`}
+            </p>
+            <p className="mt-1 text-xs text-white/65">
+              Build {formatRupeeShort(lastLaunchEconomics.investment)} · Revenue{' '}
+              {formatRupeeShort(lastLaunchEconomics.revenue)} ·{' '}
+              {lastLaunchEconomics.adoptionPercentage}% adoption ·{' '}
+              {lastLaunchEconomics.customers} customers
+            </p>
+          </motion.div>
+        )}
 
         <motion.div
           className="mt-4 grid min-h-0 flex-1 gap-4 lg:grid-cols-[1fr_1.1fr]"
@@ -272,12 +322,21 @@ export default function CompanySetup() {
                 : undefined
             }
           >
-            <PrimaryButton onClick={handleLaunch} disabled={!canLaunch}>
-              <span className="inline-flex items-center gap-2">
-                <Rocket className="h-4 w-4" aria-hidden="true" />
-                Launch Startup
-              </span>
-            </PrimaryButton>
+            {stats.cash <= 0 && hasLaunchedThisSolution ? (
+              <PrimaryButton onClick={() => navigate('/game-over', { replace: true })}>
+                <span className="inline-flex items-center gap-2">
+                  <Rocket className="h-4 w-4" aria-hidden="true" />
+                  View Game Over
+                </span>
+              </PrimaryButton>
+            ) : (
+              <PrimaryButton onClick={handleLaunch} disabled={!canLaunch}>
+                <span className="inline-flex items-center gap-2">
+                  <Rocket className="h-4 w-4" aria-hidden="true" />
+                  Launch Startup
+                </span>
+              </PrimaryButton>
+            )}
           </span>
         </footer>
       </div>
@@ -285,6 +344,7 @@ export default function CompanySetup() {
       <LaunchProductModal
         open={showLaunchModal}
         onClose={handleCloseLaunchModal}
+        onConfirmed={handleLaunchConfirmed}
       />
     </div>
   )

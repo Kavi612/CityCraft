@@ -42,7 +42,7 @@ const server = app.listen(port, () => {
   if (!llm) {
     console.warn('[city-craft-api] No LLM key found.')
     console.warn(
-      '[city-craft-api] Add GROQ_API_KEY (gsk_...) or GROK_API_KEY (xai-...) to backend/.env.local',
+      '[city-craft-api] Add GROQ_API_KEY (gsk_...) or GROK_API_KEY (xai-...) to env vars (Render dashboard or backend/.env.local locally).',
     )
   } else {
     console.log(

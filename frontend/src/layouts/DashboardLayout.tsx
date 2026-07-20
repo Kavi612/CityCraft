@@ -20,7 +20,11 @@ export default function DashboardLayout() {
   }, [gameOutcome, navigate])
 
   if (!bootstrap.ready) {
-    return null
+    return (
+      <div className="flex h-svh items-center justify-center bg-background text-sm text-stone-500">
+        Loading dashboard…
+      </div>
+    )
   }
 
   const {
